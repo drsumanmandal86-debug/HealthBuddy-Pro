@@ -13,53 +13,48 @@
     <div id="auth-section" class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100 text-center">
             <h2 class="text-4xl font-black text-blue-600 mb-2">HealthBuddy Pro</h2>
-            <p class="text-gray-500 mb-8 font-medium">আপনার স্বাস্থ্য, আমাদের অগ্রাধিকার</p>
             <div id="login-form" class="space-y-4">
-                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-2xl hover:bg-blue-700 shadow-lg transition-all active:scale-95">প্রবেশ করুন</button>
+                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-2xl shadow-lg">প্রবেশ করুন</button>
             </div>
         </div>
     </div>
 
     <div id="dashboard-section" class="hidden min-h-screen flex flex-col md:flex-row">
-        <aside class="w-full md:w-64 bg-white border-r border-gray-200 p-6 flex flex-col fixed h-full z-20">
+        <aside class="w-full md:w-64 bg-white border-r p-6 fixed h-full z-20">
             <h2 class="text-xl font-bold text-blue-600 mb-10"><i class="fas fa-heartbeat mr-2"></i>HealthBuddy</h2>
-            <nav class="flex-1 space-y-4">
+            <nav class="space-y-4">
                 <button onclick="showTab('feed')" id="btn-feed" class="w-full flex items-center p-3 bg-blue-50 text-blue-600 rounded-xl font-semibold"><i class="fas fa-home mr-3"></i>ফিড (Home)</button>
-                <button onclick="showTab('stats')" id="btn-stats" class="w-full flex items-center p-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold"><i class="fas fa-chart-line mr-3"></i>অ্যানালিটিক্স</button>
-                <button onclick="openModal()" class="w-full flex items-center p-3 text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-md mt-4 font-bold"><i class="fas fa-plus mr-3"></i>নতুন পোস্ট</button>
+                <button onclick="showTab('stats')" id="btn-stats" class="w-full flex items-center p-3 text-gray-500 rounded-xl font-semibold hover:bg-gray-50"><i class="fas fa-chart-line mr-3"></i>অ্যানালিটিক্স</button>
+                <button onclick="openModal()" class="w-full bg-blue-600 text-white p-3 rounded-xl mt-4 font-bold shadow-md">নতুন পোস্ট</button>
             </nav>
-            <button onclick="logout()" class="p-3 text-red-500 font-semibold text-left hover:bg-red-50 rounded-xl transition mt-auto"><i class="fas fa-sign-out-alt mr-3"></i>লগ আউট</button>
+            <button onclick="logout()" class="p-3 text-red-500 font-semibold mt-auto absolute bottom-6"><i class="fas fa-sign-out-alt mr-3"></i>লগ আউট</button>
         </aside>
 
         <main class="flex-1 md:ml-64 p-6 md:p-10">
-            <div class="max-w-3xl mx-auto">
-                <div id="tab-feed">
-                    <h1 class="text-3xl font-extrabold text-slate-800 mb-10 text-center">হেলথ ফিড</h1>
-                    <div id="health-feed" class="space-y-6"></div>
-                </div>
+            <div id="tab-feed" class="max-w-2xl mx-auto">
+                <h1 class="text-3xl font-extrabold text-slate-800 mb-8 text-center">হেলথ ফিড</h1>
+                <div id="health-feed" class="space-y-6"></div>
+            </div>
 
-                <div id="tab-stats" class="hidden">
-                    <h1 class="text-3xl font-extrabold text-slate-800 mb-10">স্বাস্থ্য বিশ্লেষণ</h1>
-                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-8">
-                        <canvas id="multiHealthChart" height="200"></canvas>
-                        <p class="text-xs text-gray-400 mt-4 text-center">* গত ৭ দিনের তথ্যের ভিত্তিতে তৈরি</p>
-                    </div>
+            <div id="tab-stats" class="hidden max-w-3xl mx-auto">
+                <h1 class="text-3xl font-extrabold text-slate-800 mb-8">স্বাস্থ্য বিশ্লেষণ</h1>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <canvas id="multiHealthChart" width="400" height="200"></canvas>
                 </div>
             </div>
         </main>
     </div>
 
     <div id="data-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-8 rounded-3xl w-full max-w-sm shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800 text-center">আজকের আপডেট</h2>
+        <div class="bg-white p-8 rounded-3xl w-full max-w-sm shadow-2xl text-center">
+            <h2 class="text-2xl font-bold mb-6">আজকের আপডেট</h2>
             <div class="space-y-4">
-                <input type="number" id="input-hr" placeholder="হার্ট রেট (bpm)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
                 <input type="number" id="input-steps" placeholder="আজকের ধাপ" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
                 <input type="number" id="input-water" placeholder="পানি পান (লিটার)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
-                <button onclick="saveData()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold hover:bg-blue-700 transition">পোস্ট করুন</button>
-                <button onclick="closeModal()" class="w-full text-gray-400 font-bold p-2 text-sm">বন্ধ করুন</button>
+                <button onclick="saveData()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">পোস্ট করুন</button>
+                <button onclick="closeModal()" class="w-full text-gray-400 p-2">বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -83,47 +78,49 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Tab Switching & Chart Initialization
+        // Tab Switching & Chart Logic
+        let myChart = null;
         window.showTab = (tab) => {
             document.getElementById('tab-feed').classList.toggle('hidden', tab !== 'feed');
             document.getElementById('tab-stats').classList.toggle('hidden', tab !== 'stats');
-            if(tab === 'stats') initMultiChart();
+            
+            if(tab === 'stats') {
+                // চার্ট রেন্ডার করতে সামান্য সময় দেওয়া যেন HTML লোড হয়
+                setTimeout(initChart, 200); 
+            }
         };
 
-        window.initMultiChart = () => {
+        function initChart() {
             const ctx = document.getElementById('multiHealthChart').getContext('2d');
-            new Chart(ctx, {
+            if (myChart) myChart.destroy(); // পুরনো চার্ট মুছে নতুন করে আঁকা
+            
+            myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['শনি', 'রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র'],
                     datasets: [
                         {
                             label: 'কদম (Steps)',
-                            data: [4500, 5200, 4800, 7000, 6100, 8000, 5500],
+                            data: [3000, 4500, 3200, 5000, 7000, 4000, 6500],
                             borderColor: '#2563eb',
-                            tension: 0.4,
-                            yAxisID: 'y'
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            fill: true,
+                            tension: 0.4
                         },
                         {
-                            label: 'পানি (Litre)',
-                            data: [2.5, 3.0, 2.8, 3.5, 2.0, 3.2, 3.0],
+                            label: 'পানি (L)',
+                            data: [2.0, 2.5, 3.0, 2.8, 3.5, 2.2, 3.0],
                             borderColor: '#06b6d4',
-                            backgroundColor: 'rgba(6, 182, 212, 0.2)',
                             type: 'bar',
-                            yAxisID: 'y1'
+                            backgroundColor: 'rgba(6, 182, 212, 0.5)'
                         }
                     ]
                 },
-                options: {
-                    scales: {
-                        y: { type: 'linear', position: 'left' },
-                        y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } }
-                    }
-                }
+                options: { responsive: true }
             });
-        };
+        }
 
-        // Firebase Functions (Login, Logout, Save, Feed) remain same as previous working version
+        // Firebase Functions
         window.login = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -133,34 +130,20 @@
         window.openModal = () => document.getElementById('data-modal').classList.remove('hidden');
         window.closeModal = () => document.getElementById('data-modal').classList.add('hidden');
 
-        window.saveData = async () => {
-            const user = auth.currentUser;
-            if (user) {
-                await addDoc(collection(db, "posts"), {
-                    userId: user.uid,
-                    userName: user.email.split('@')[0],
-                    heartRate: document.getElementById('input-hr').value,
-                    steps: document.getElementById('input-steps').value,
-                    water: document.getElementById('input-water').value,
-                    timestamp: serverTimestamp()
-                });
-                closeModal();
-            }
-        };
-
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('auth-section').classList.add('hidden');
                 document.getElementById('dashboard-section').classList.remove('hidden');
                 const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
                 onSnapshot(q, (snapshot) => {
-                    document.getElementById('health-feed').innerHTML = snapshot.docs.map(doc => {
-                        const post = doc.data();
-                        return `<div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-4">
-                            <h4 class="font-bold text-blue-600">${post.userName}</h4>
-                            <p class="text-slate-600">🏃 ${post.steps} steps | 💧 ${post.water} L | ❤️ ${post.heartRate} bpm</p>
+                    const html = snapshot.docs.map(doc => {
+                        const p = doc.data();
+                        return `<div class="bg-white p-4 rounded-2xl shadow-sm border mb-4">
+                            <p class="font-bold text-blue-600">${p.userName || 'ইউজার'}</p>
+                            <p class="text-sm text-gray-600">🏃 ${p.steps} ধাপ | 💧 ${p.water} লিটার</p>
                         </div>`;
                     }).join('');
+                    document.getElementById('health-feed').innerHTML = html;
                 });
             } else {
                 document.getElementById('auth-section').classList.remove('hidden');
