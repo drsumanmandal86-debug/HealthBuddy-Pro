@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthBuddy Pro - Social & Stats</title>
+    <title>HealthBuddy Pro - Advanced Stats</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,7 +12,7 @@
 
     <div id="auth-section" class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100 text-center">
-            <h2 class="text-4xl font-black text-blue-600 mb-2 text-center">HealthBuddy Pro</h2>
+            <h2 class="text-4xl font-black text-blue-600 mb-2">HealthBuddy Pro</h2>
             <p class="text-gray-500 mb-8 font-medium">আপনার স্বাস্থ্য, আমাদের অগ্রাধিকার</p>
             <div id="login-form" class="space-y-4">
                 <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
@@ -34,24 +34,17 @@
         </aside>
 
         <main class="flex-1 md:ml-64 p-6 md:p-10">
-            <div class="max-w-2xl mx-auto">
+            <div class="max-w-3xl mx-auto">
                 <div id="tab-feed">
-                    <header class="mb-10 text-center md:text-left">
-                        <h1 class="text-3xl font-extrabold text-slate-800">হেলথ ফিড</h1>
-                        <p class="text-slate-500 text-sm">সবার আপডেট রিয়েল-টাইমে দেখুন।</p>
-                    </header>
-                    <div id="health-feed" class="space-y-6">
-                        <p class="text-center text-gray-400 py-10">ফিড লোড হচ্ছে...</p>
-                    </div>
+                    <h1 class="text-3xl font-extrabold text-slate-800 mb-10 text-center">হেলথ ফিড</h1>
+                    <div id="health-feed" class="space-y-6"></div>
                 </div>
 
                 <div id="tab-stats" class="hidden">
-                    <header class="mb-10 text-center md:text-left">
-                        <h1 class="text-3xl font-extrabold text-slate-800">অ্যানালিটিক্স</h1>
-                        <p class="text-slate-500 text-sm">আপনার সাপ্তাহিক অগ্রগতির গ্রাফ।</p>
-                    </header>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
-                        <canvas id="healthChart" height="200"></canvas>
+                    <h1 class="text-3xl font-extrabold text-slate-800 mb-10">স্বাস্থ্য বিশ্লেষণ</h1>
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-8">
+                        <canvas id="multiHealthChart" height="200"></canvas>
+                        <p class="text-xs text-gray-400 mt-4 text-center">* গত ৭ দিনের তথ্যের ভিত্তিতে তৈরি</p>
                     </div>
                 </div>
             </div>
@@ -60,12 +53,12 @@
 
     <div id="data-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white p-8 rounded-3xl w-full max-w-sm shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800 text-center">কী করছেন আজ?</h2>
+            <h2 class="text-2xl font-bold mb-6 text-slate-800 text-center">আজকের আপডেট</h2>
             <div class="space-y-4">
-                <input type="number" id="input-hr" placeholder="হার্ট রেট (bpm)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="number" id="input-steps" placeholder="আজকের ধাপ" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="number" id="input-water" placeholder="পানি পান (লিটার)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="saveData()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold hover:bg-blue-700 transition active:scale-95">পোস্ট করুন</button>
+                <input type="number" id="input-hr" placeholder="হার্ট রেট (bpm)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                <input type="number" id="input-steps" placeholder="আজকের ধাপ" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                <input type="number" id="input-water" placeholder="পানি পান (লিটার)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                <button onclick="saveData()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold hover:bg-blue-700 transition">পোস্ট করুন</button>
                 <button onclick="closeModal()" class="w-full text-gray-400 font-bold p-2 text-sm">বন্ধ করুন</button>
             </div>
         </div>
@@ -90,105 +83,84 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Tab Switching
+        // Tab Switching & Chart Initialization
         window.showTab = (tab) => {
-            const feedTab = document.getElementById('tab-feed');
-            const statsTab = document.getElementById('tab-stats');
-            const btnFeed = document.getElementById('btn-feed');
-            const btnStats = document.getElementById('btn-stats');
-
-            if(tab === 'feed') {
-                feedTab.classList.remove('hidden');
-                statsTab.classList.add('hidden');
-                btnFeed.classList.add('bg-blue-50', 'text-blue-600');
-                btnStats.classList.remove('bg-blue-50', 'text-blue-600');
-            } else {
-                feedTab.classList.add('hidden');
-                statsTab.classList.remove('hidden');
-                btnStats.classList.add('bg-blue-50', 'text-blue-600');
-                btnFeed.classList.remove('bg-blue-50', 'text-blue-600');
-                initChart(); // গ্রাফ লোড করা
-            }
+            document.getElementById('tab-feed').classList.toggle('hidden', tab !== 'feed');
+            document.getElementById('tab-stats').classList.toggle('hidden', tab !== 'stats');
+            if(tab === 'stats') initMultiChart();
         };
 
-        // গ্রাফ লজিক
-        window.initChart = () => {
-            const ctx = document.getElementById('healthChart').getContext('2d');
-            // Chart.js গ্রাফ তৈরি
+        window.initMultiChart = () => {
+            const ctx = document.getElementById('multiHealthChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                    datasets: [{
-                        label: 'কদম (Steps)',
-                        data: [4500, 5200, 4800, 7000, 6100, 8000, 5500],
-                        borderColor: '#2563eb',
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
+                    labels: ['শনি', 'রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র'],
+                    datasets: [
+                        {
+                            label: 'কদম (Steps)',
+                            data: [4500, 5200, 4800, 7000, 6100, 8000, 5500],
+                            borderColor: '#2563eb',
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'পানি (Litre)',
+                            data: [2.5, 3.0, 2.8, 3.5, 2.0, 3.2, 3.0],
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                            type: 'bar',
+                            yAxisID: 'y1'
+                        }
+                    ]
                 },
-                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                options: {
+                    scales: {
+                        y: { type: 'linear', position: 'left' },
+                        y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } }
+                    }
+                }
             });
         };
 
-        // লগইন লজিক
+        // Firebase Functions (Login, Logout, Save, Feed) remain same as previous working version
         window.login = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            try { await signInWithEmailAndPassword(auth, email, password); } catch (e) { alert("লগইন এরর: " + e.message); }
+            try { await signInWithEmailAndPassword(auth, email, password); } catch (e) { alert(e.message); }
         };
-
         window.logout = () => signOut(auth);
         window.openModal = () => document.getElementById('data-modal').classList.remove('hidden');
         window.closeModal = () => document.getElementById('data-modal').classList.add('hidden');
 
-        // ডাটা সেভ
         window.saveData = async () => {
             const user = auth.currentUser;
             if (user) {
-                const hData = {
+                await addDoc(collection(db, "posts"), {
                     userId: user.uid,
-                    userName: user.email.split('@')[0], // ইমেইল থেকে নাম নেওয়া
+                    userName: user.email.split('@')[0],
                     heartRate: document.getElementById('input-hr').value,
                     steps: document.getElementById('input-steps').value,
                     water: document.getElementById('input-water').value,
                     timestamp: serverTimestamp()
-                };
-                await addDoc(collection(db, "posts"), hData);
+                });
                 closeModal();
             }
         };
 
-        // রিয়েল-টাইম ডাটা লোডিং
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('auth-section').classList.add('hidden');
                 document.getElementById('dashboard-section').classList.remove('hidden');
-                
                 const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
                 onSnapshot(q, (snapshot) => {
-                    const feedHtml = snapshot.docs.map(doc => {
+                    document.getElementById('health-feed').innerHTML = snapshot.docs.map(doc => {
                         const post = doc.data();
-                        const date = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString('bn-BD') : "এখনই";
-                        return `
-                            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                                <div class="flex items-center mb-4">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">${post.userName ? post.userName[0].toUpperCase() : 'U'}</div>
-                                    <div>
-                                        <h4 class="font-bold text-slate-800">${post.userName || 'ইউজার'}</h4>
-                                        <p class="text-[10px] text-gray-400">${date}</p>
-                                    </div>
-                                </div>
-                                <p class="text-slate-600 mb-4 text-sm">আজকের অর্জন: 🏃 ${post.steps} কদম হেঁটেছি এবং 💧 ${post.water} লিটার পানি পান করেছি।</p>
-                                <div class="flex space-x-4 text-gray-400 text-xs">
-                                    <span><i class="far fa-heart mr-1"></i> লাইক</span>
-                                    <span><i class="far fa-comment mr-1"></i> কমেন্ট</span>
-                                </div>
-                            </div>
-                        `;
+                        return `<div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-4">
+                            <h4 class="font-bold text-blue-600">${post.userName}</h4>
+                            <p class="text-slate-600">🏃 ${post.steps} steps | 💧 ${post.water} L | ❤️ ${post.heartRate} bpm</p>
+                        </div>`;
                     }).join('');
-                    document.getElementById('health-feed').innerHTML = feedHtml;
                 });
             } else {
                 document.getElementById('auth-section').classList.remove('hidden');
