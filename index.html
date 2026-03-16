@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthBuddy Pro - Dashboard</title>
+    <title>HealthBuddy Pro - Social Feed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,49 +11,50 @@
 
     <div id="auth-section" class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100 text-center">
-            <h2 class="text-4xl font-black text-blue-600 mb-2 text-center">HealthBuddy Pro</h2>
+            <h2 class="text-4xl font-black text-blue-600 mb-2">HealthBuddy Pro</h2>
             <p class="text-gray-500 mb-8 font-medium">আপনার স্বাস্থ্য, আমাদের অগ্রাধিকার</p>
             <div id="login-form" class="space-y-4">
-                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-95">প্রবেশ করুন</button>
+                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-2xl hover:bg-blue-700 shadow-lg transition-all active:scale-95">প্রবেশ করুন</button>
             </div>
         </div>
     </div>
 
     <div id="dashboard-section" class="hidden min-h-screen flex flex-col md:flex-row">
-        <aside class="w-full md:w-64 bg-white border-r border-gray-200 p-6 flex flex-col">
+        <aside class="w-full md:w-64 bg-white border-r border-gray-200 p-6 flex flex-col fixed h-full">
             <h2 class="text-xl font-bold text-blue-600 mb-10"><i class="fas fa-heartbeat mr-2"></i>HealthBuddy</h2>
             <nav class="flex-1 space-y-4">
-                <a href="#" class="flex items-center p-3 bg-blue-50 text-blue-600 rounded-xl font-semibold"><i class="fas fa-home mr-3"></i>ড্যাশবোর্ড</a>
-                <button onclick="openModal()" class="w-full flex items-center p-3 text-white bg-green-500 rounded-xl hover:bg-green-600 transition shadow-md"><i class="fas fa-plus mr-3"></i>আপডেট দিন</button>
+                <a href="#" class="flex items-center p-3 bg-blue-50 text-blue-600 rounded-xl font-semibold"><i class="fas fa-home mr-3"></i>ফিড (Home)</a>
+                <button onclick="openModal()" class="w-full flex items-center p-3 text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-md"><i class="fas fa-plus mr-3"></i>নতুন পোস্ট</button>
             </nav>
-            <button onclick="logout()" class="mt-auto p-3 text-red-500 font-semibold text-left hover:bg-red-50 rounded-xl transition"><i class="fas fa-sign-out-alt mr-3"></i>লগ আউট</button>
+            <button onclick="logout()" class="p-3 text-red-500 font-semibold text-left hover:bg-red-50 rounded-xl transition"><i class="fas fa-sign-out-alt mr-3"></i>লগ আউট</button>
         </aside>
 
-        <main class="flex-1 p-6 md:p-10">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h1 class="text-3xl font-extrabold text-slate-800">স্বাগতম, <span id="user-name-display" class="text-blue-600">Suman</span>!</h1>
-                    <p class="text-slate-500">আপনার আজকের হেলথ আপডেট দেখুন।</p>
-                </div>
-            </header>
+        <main class="flex-1 md:ml-64 p-6 md:p-10">
+            <div class="max-w-2xl mx-auto">
+                <header class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-800">হেলথ ফিড</h1>
+                    <p class="text-slate-500">আপনার এবং আপনার বন্ধুদের আপডেট এখানে দেখুন।</p>
+                </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                    <div class="w-10 h-10 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-heart"></i></div>
-                    <p class="text-gray-500 text-sm">হার্ট রেট</p>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="display-hr">--</span> bpm</h3>
+                <div class="grid grid-cols-3 gap-4 mb-10">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center">
+                        <p class="text-xs text-gray-400 uppercase font-bold">Steps</p>
+                        <p class="text-xl font-black text-blue-600" id="display-steps">0</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center">
+                        <p class="text-xs text-gray-400 uppercase font-bold">HR</p>
+                        <p class="text-xl font-black text-red-500" id="display-hr">0</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center">
+                        <p class="text-xs text-gray-400 uppercase font-bold">Water</p>
+                        <p class="text-xl font-black text-cyan-500" id="display-water">0</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                    <div class="w-10 h-10 bg-green-50 text-green-500 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-walking"></i></div>
-                    <p class="text-gray-500 text-sm">আজকের ধাপ</p>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="display-steps">--</span> steps</h3>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                    <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-tint"></i></div>
-                    <p class="text-gray-500 text-sm">পানি পান</p>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="display-water">--</span> Litre</h3>
+
+                <div id="health-feed" class="space-y-6">
+                    <p class="text-center text-gray-400 py-10">ফিড লোড হচ্ছে...</p>
                 </div>
             </div>
         </main>
@@ -61,15 +62,13 @@
 
     <div id="data-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white p-8 rounded-3xl w-full max-w-sm shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-slate-800 text-center">আজকের হেলথ ডাটা</h2>
+            <h2 class="text-2xl font-bold mb-6 text-slate-800 text-center">কী করছেন আজ?</h2>
             <div class="space-y-4">
                 <input type="number" id="input-hr" placeholder="হার্ট রেট (bpm)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="number" id="input-steps" placeholder="আজকের মোট ধাপ" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="number" id="input-steps" placeholder="আজকের ধাপ" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
                 <input type="number" id="input-water" placeholder="পানি পান (লিটার)" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <div class="flex space-x-3 pt-4">
-                    <button onclick="saveData()" class="flex-1 bg-blue-600 text-white p-4 rounded-2xl font-bold hover:bg-blue-700 transition active:scale-95">সেভ করুন</button>
-                    <button onclick="closeModal()" class="bg-gray-100 text-gray-500 p-4 rounded-2xl font-bold hover:bg-gray-200 transition">বন্ধ</button>
-                </div>
+                <button onclick="saveData()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold hover:bg-blue-700 transition">পোস্ট করুন</button>
+                <button onclick="closeModal()" class="w-full text-gray-400 font-bold p-2">বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -77,7 +76,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCv0E3Qm_V4mDpcbCr8dQcpCv_2QmTwmyw",
@@ -93,59 +92,62 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // লগইন ফাংশন
         window.login = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                alert("এরর: " + error.message);
-            }
+            try { await signInWithEmailAndPassword(auth, email, password); } catch (e) { alert(e.message); }
         };
-
-        // লগ আউট
         window.logout = () => signOut(auth);
-
-        // Modal কন্ট্রোল
         window.openModal = () => document.getElementById('data-modal').classList.remove('hidden');
         window.closeModal = () => document.getElementById('data-modal').classList.add('hidden');
 
-        // ডাটা সেভ ফাংশন
+        // ডাটা সেভ (পোস্ট হিসেবে)
         window.saveData = async () => {
             const user = auth.currentUser;
             if (user) {
-                const healthData = {
+                const hData = {
+                    userId: user.uid,
+                    userName: document.getElementById('user-name-display')?.innerText || "User",
                     heartRate: document.getElementById('input-hr').value,
                     steps: document.getElementById('input-steps').value,
                     water: document.getElementById('input-water').value,
                     timestamp: serverTimestamp()
                 };
-                try {
-                    await setDoc(doc(db, "healthRecords", user.uid), healthData);
-                    alert("সফলভাবে সেভ হয়েছে!");
-                    closeModal();
-                    location.reload();
-                } catch (e) { alert("এরর: " + e.message); }
+                await addDoc(collection(db, "posts"), hData);
+                closeModal();
             }
         };
 
-        // অথেনটিকেশন এবং ডাটা ডিসপ্লে
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('auth-section').classList.add('hidden');
                 document.getElementById('dashboard-section').classList.remove('hidden');
                 
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) document.getElementById('user-name-display').innerText = userDoc.data().name;
-
-                const healthDoc = await getDoc(doc(db, "healthRecords", user.uid));
-                if (healthDoc.exists()) {
-                    const h = healthDoc.data();
-                    document.getElementById('display-hr').innerText = h.heartRate || "--";
-                    document.getElementById('display-steps').innerText = h.steps || "--";
-                    document.getElementById('display-water').innerText = h.water || "--";
-                }
+                // রিয়েল-টাইম ফিড লোড (Facebook-এর মতো)
+                const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    const feedHtml = snapshot.docs.map(doc => {
+                        const post = doc.data();
+                        const date = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : "এখনই";
+                        return `
+                            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">${post.userName[0]}</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">${post.userName}</h4>
+                                        <p class="text-xs text-gray-400">${date}</p>
+                                    </div>
+                                </div>
+                                <p class="text-slate-600 mb-4">আজকের অর্জন: 🏃 ${post.steps} কদম হেঁটেছি এবং 💧 ${post.water} লিটার পানি পান করেছি।</p>
+                                <div class="flex space-x-4 text-gray-400 text-sm">
+                                    <span><i class="far fa-heart mr-1"></i> লাইক</span>
+                                    <span><i class="far fa-comment mr-1"></i> কমেন্ট</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    document.getElementById('health-feed').innerHTML = feedHtml;
+                });
             } else {
                 document.getElementById('auth-section').classList.remove('hidden');
                 document.getElementById('dashboard-section').classList.add('hidden');
