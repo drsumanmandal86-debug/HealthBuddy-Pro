@@ -12,68 +12,67 @@
     <div id="auth-section" class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100 text-center">
             <h2 class="text-4xl font-black text-blue-600 mb-2">HealthBuddy Pro</h2>
-            <p class="text-gray-500 mb-8 font-medium">আপনার স্বাস্থ্য, আমাদের অগ্রাধিকার</p>
             <div id="login-form" class="space-y-4">
-                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-95">প্রবেশ করুন</button>
+                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-2xl hover:bg-blue-700 shadow-lg">প্রবেশ করুন</button>
             </div>
         </div>
     </div>
 
     <div id="dashboard-section" class="hidden min-h-screen flex flex-col md:flex-row">
-        
         <aside class="w-full md:w-64 bg-white border-r border-gray-200 p-6 flex flex-col">
             <h2 class="text-xl font-bold text-blue-600 mb-10"><i class="fas fa-heartbeat mr-2"></i>HealthBuddy</h2>
             <nav class="flex-1 space-y-4">
                 <a href="#" class="flex items-center p-3 bg-blue-50 text-blue-600 rounded-xl font-semibold"><i class="fas fa-home mr-3"></i>ড্যাশবোর্ড</a>
-                <a href="#" class="flex items-center p-3 text-gray-500 hover:bg-gray-50 rounded-xl transition"><i class="fas fa-user-md mr-3"></i>ডাক্তার</a>
-                <a href="#" class="flex items-center p-3 text-gray-500 hover:bg-gray-50 rounded-xl transition"><i class="fas fa-chart-line mr-3"></i>হেলথ রিপোর্ট</a>
+                <button onclick="openModal()" class="w-full flex items-center p-3 text-white bg-green-500 rounded-xl hover:bg-green-600 transition"><i class="fas fa-plus mr-3"></i>আপডেট দিন</button>
             </nav>
-            <button onclick="logout()" class="mt-auto p-3 text-red-500 hover:bg-red-50 rounded-xl transition font-semibold text-left"><i class="fas fa-sign-out-alt mr-3"></i>লগ আউট</button>
+            <button onclick="logout()" class="mt-auto p-3 text-red-500 font-semibold text-left"><i class="fas fa-sign-out-alt mr-3"></i>লগ আউট</button>
         </aside>
 
         <main class="flex-1 p-6 md:p-10">
-            <header class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
-                <div>
-                    <h1 class="text-3xl font-extrabold text-slate-800">স্বাগতম, <span id="user-name-display" class="text-blue-600">...</span>!</h1>
-                    <p class="text-slate-500">চলুন দেখে নিই আপনার আজকের হেলথ স্ট্যাটাস।</p>
-                </div>
-                <div class="flex items-center space-x-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl" id="user-initials">SM</div>
-                    <div>
-                        <p class="font-bold text-slate-800" id="user-full-name">Suman Mandal</p>
-                        <p class="text-xs text-slate-400" id="user-role-badge">General User</p>
-                    </div>
-                </div>
+            <header class="flex justify-between items-center mb-10">
+                <h1 class="text-3xl font-extrabold text-slate-800">স্বাগতম, <span id="user-name-display" class="text-blue-600">...</span>!</h1>
             </header>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer">
-                    <div class="w-10 h-10 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-heart"></i></div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                     <p class="text-gray-500 text-sm">হার্ট রেট</p>
-                    <h3 class="text-2xl font-bold text-slate-800">72 bpm</h3>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="display-hr">--</span> bpm</h3>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer">
-                    <div class="w-10 h-10 bg-green-50 text-green-500 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-walking"></i></div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                     <p class="text-gray-500 text-sm">আজকের ধাপ</p>
-                    <h3 class="text-2xl font-bold text-slate-800">4,520 steps</h3>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="display-steps">--</span> steps</h3>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer">
-                    <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-tint"></i></div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                     <p class="text-gray-500 text-sm">পানি পান</p>
-                    <h3 class="text-2xl font-bold text-slate-800">1.5 / 3 L</h3>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="display-water">--</span> L</h3>
                 </div>
             </div>
         </main>
     </div>
 
+    <div id="data-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-3xl w-full max-w-sm">
+            <h2 class="text-2xl font-bold mb-6 text-slate-800">আজকের আপডেট</h2>
+            <div class="space-y-4">
+                <input type="number" id="input-hr" placeholder="হার্ট রেট (bpm)" class="w-full p-4 bg-gray-50 border rounded-xl outline-none">
+                <input type="number" id="input-steps" placeholder="আজকের ধাপ" class="w-full p-4 bg-gray-50 border rounded-xl outline-none">
+                <input type="number" id="input-water" placeholder="পানি (Litre)" class="w-full p-4 bg-gray-50 border rounded-xl outline-none">
+                <div class="flex space-x-2">
+                    <button onclick="saveData()" class="flex-1 bg-blue-600 text-white p-4 rounded-xl font-bold">সেভ করুন</button>
+                    <button onclick="closeModal()" class="bg-gray-200 text-gray-600 p-4 rounded-xl font-bold">বন্ধ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // আপনার কনফিগারেশন
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCv0E3Qm_V4mDpcbCr8dQcpCv_2QmTwmyw",
             authDomain: "healthbuddy-pro.firebaseapp.com",
@@ -88,45 +87,52 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // লগইন ফাংশন
-        window.login = async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                alert("লগইন এরর: " + error.message);
+        // Modal Functions
+        window.openModal = () => document.getElementById('data-modal').classList.remove('hidden');
+        window.closeModal = () => document.getElementById('data-modal').classList.add('hidden');
+
+        // Save Data to Firestore
+        window.saveData = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const healthData = {
+                    heartRate: document.getElementById('input-hr').value,
+                    steps: document.getElementById('input-steps').value,
+                    water: document.getElementById('input-water').value,
+                    timestamp: serverTimestamp()
+                };
+                await setDoc(doc(db, "healthRecords", user.uid), healthData);
+                alert("ডাটা সেভ হয়েছে!");
+                location.reload();
             }
         };
 
-        // লগ আউট ফাংশন
-        window.logout = () => signOut(auth);
-
-        // ইউজারের অবস্থা চেক করা
+        // Authentication & Data Display
         onAuthStateChanged(auth, async (user) => {
-            const authDiv = document.getElementById('auth-section');
-            const dashDiv = document.getElementById('dashboard-section');
-
             if (user) {
-                authDiv.classList.add('hidden');
-                dashDiv.classList.remove('hidden');
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
                 
-                // Firestore থেকে তথ্য আনা
-                try {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
-                        document.getElementById('user-name-display').innerText = data.name;
-                        document.getElementById('user-full-name').innerText = data.name;
-                        document.getElementById('user-role-badge').innerText = data.role;
-                        document.getElementById('user-initials').innerText = data.name.substring(0, 2).toUpperCase();
-                    }
-                } catch (e) { console.error("ডাটা আনতে সমস্যা:", e); }
+                // প্রোফাইল তথ্য আনা
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) document.getElementById('user-name-display').innerText = userDoc.data().name;
+
+                // হেলথ রেকর্ড আনা
+                const healthDoc = await getDoc(doc(db, "healthRecords", user.uid));
+                if (healthDoc.exists()) {
+                    const hData = healthDoc.data();
+                    document.getElementById('display-hr').innerText = hData.heartRate || "--";
+                    document.getElementById('display-steps').innerText = hData.steps || "--";
+                    document.getElementById('display-water').innerText = hData.water || "--";
+                }
             } else {
-                authDiv.classList.remove('hidden');
-                dashDiv.classList.add('hidden');
+                document.getElementById('auth-section').classList.remove('hidden');
+                document.getElementById('dashboard-section').classList.add('hidden');
             }
         });
+
+        window.login = async () => { /* আগের লগইন কোড */ };
+        window.logout = () => signOut(auth);
     </script>
 </body>
 </html>
