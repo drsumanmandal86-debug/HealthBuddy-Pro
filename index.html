@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthBuddy Pro - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-extrabold text-blue-600">HealthBuddy Pro</h2>
+            <p class="text-gray-500 mt-2">আপনার স্বাস্থ্য, আমাদের অগ্রাধিকার</p>
+        </div>
+        
+        <div id="login-form">
+            <div class="space-y-4">
+                <input type="email" id="email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
+                <input type="password" id="password" placeholder="পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
+                <button onclick="login()" class="w-full bg-blue-600 text-white font-bold p-4 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition">প্রবেশ করুন</button>
+            </div>
+            <p class="mt-6 text-center text-gray-600">নতুন ইউজার? <a href="#" onclick="toggleForm()" class="text-blue-600 font-semibold underline">রেজিস্ট্রেশন করুন</a></p>
+        </div>
+
+        <div id="signup-form" class="hidden">
+            <div class="space-y-4">
+                <input type="text" id="name" placeholder="আপনার পূর্ণ নাম" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition">
+                <input type="email" id="signup-email" placeholder="ইমেইল" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition">
+                <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition">
+                <select id="userType" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none">
+                    <option value="General">আমি রোগী/সাধারণ ইউজার</option>
+                    <option value="Expert">আমি ডাক্তার/বিশেষজ্ঞ</option>
+                </select>
+                <button onclick="signup()" class="w-full bg-green-600 text-white font-bold p-4 rounded-xl hover:bg-green-700 shadow-lg shadow-green-200 transition">অ্যাকাউন্ট খুলুন</button>
+            </div>
+            <p class="mt-6 text-center text-gray-600">অ্যাকাউন্ট আছে? <a href="#" onclick="toggleForm()" class="text-blue-600 font-semibold underline">লগইন করুন</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // আপনার প্রোভাইড করা লেটেস্ট কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyCv0E3Qm_V4mDpcbCr8dQcpCv_2QmTwmyw",
+            authDomain: "healthbuddy-pro.firebaseapp.com",
+            projectId: "healthbuddy-pro",
+            storageBucket: "healthbuddy-pro.firebasestorage.app",
+            messagingSenderId: "898767277336",
+            appId: "1:898767277336:web:8bb90251b348818512226d",
+            measurementId: "G-64W8NEW1K6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // লগইন ফাংশন
+        window.login = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                alert("সাফল্যের সাথে লগইন হয়েছে!");
+                // এখানে পরে ড্যাশবোর্ডের লিংক দেব
+            } catch (error) {
+                alert("এরর: " + error.message);
+            }
+        };
+
+        // সাইনআপ ফাংশন
+        window.signup = async () => {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const name = document.getElementById('name').value;
+            const userType = document.getElementById('userType').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Firestore-এ ইউজার প্রোফাইল সেভ করা
+                await setDoc(doc(db, "users", user.uid), {
+                    name: name,
+                    email: email,
+                    role: userType,
+                    joined: new Date().toISOString()
+                });
+
+                alert("অভিনন্দন! আপনার HealthBuddy Pro অ্যাকাউন্ট তৈরি হয়েছে।");
+            } catch (error) {
+                alert("এরর: " + error.message);
+            }
+        };
+
+        window.toggleForm = () => {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        };
+    </script>
+</body>
+</html>
